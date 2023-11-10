@@ -1,0 +1,56 @@
+version: 2
+
+collision_code: test
+target_entity_type: lnk 
+target_schema: auto_dv_integration
+
+models:
+  - target: lnk_customer_branch
+    source: auto_dv_psa.customer
+    columns:
+      - target: dv_hkey_lnk_customer_branch
+        data_type: string
+        key_type: hash_key_lnk
+        source:
+          - cst_no
+          - br_cd
+        tests:
+          - unique
+          - not_null
+
+      - target: dv_hkey_hub_customer
+        data_type: string
+        key_type: hash_key_hub
+        source:
+          - cst_no
+
+      - target: dv_hkey_hub_branch
+        data_type: string
+        key_type: hash_key_hub
+        source:
+          - br_cd
+
+  - target: lnk_customer_branch_2
+    source: auto_dv_psa.customer
+    columns:
+      - target: dv_hkey_lnk_customer_branch
+        data_type: string
+        key_type: hash_key_lnk
+        source:
+          - cst_no
+          - br_cd
+        tests:
+          - unique
+          - not_null
+
+      - target: dv_hkey_hub_customer
+        data_type: string
+        key_type: hash_key_drv
+        source:
+          - cst_no
+
+      - target: dv_hkey_hub_branch
+        data_type: string
+        key_type: hash_key_hub
+        source:
+          - br_cd

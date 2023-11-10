@@ -1,0 +1,104 @@
+version: 2
+
+collision_code: test
+target_entity_type: lsat
+target_schema: auto_dv_integration
+
+models:
+  - target: lsat_customer_branch
+    source: auto_dv_psa.customer
+    columns:
+      - target: dv_hkey_lsat_customer_branch
+        data_type: string
+        key_type: hash_key_sat
+        tests:
+          - unique
+          - not_null
+
+      - target: dv_hkey_lnk_customer_branch
+        data_type: string
+        key_type: hash_key_lnk
+        source:
+          - cst_no
+          - br_cd
+        tests:
+          - not_null
+          - orphan:
+              parent_table: auto_dv_integration.lnk_customer_branch
+              parent_column: dv_hkey_lnk_customer_branch
+
+      - target: dv_hsh_dif
+        data_type: string
+        key_type: hash_diff
+
+      - target: id_number
+        data_type: string
+        source:
+          - id_number
+
+      - target: type_of_id
+        data_type: string
+        source:
+          - type_of_id
+
+      - target: date_of_issue
+        data_type: date
+        source:
+          - date_of_issue
+
+      - target: place_of_issue
+        data_type: string
+        source:
+          - place_of_issue
+
+  - target: lsat_customer_branch_2
+    source: auto_dv_psa.customer
+    columns:
+      - target: dv_hkey_lsat_customer_branch
+        data_type: string
+        key_type: hash_key_sat
+        tests:
+          - unique
+          - not_null
+
+      - target: dv_hkey_lnk_customer_branch
+        data_type: string
+        key_type: hash_key_lnk
+        source:
+          - cst_no
+          - br_cd
+        tests:
+          - not_null
+          - orphan:
+              parent_table: auto_dv_integration.lnk_customer_branch
+              parent_column: dv_hkey_lnk_customer_branch
+
+      - target: phone
+        data_type: string
+        key_type: dependent_key
+        source:
+          - phone
+
+      - target: dv_hsh_dif
+        data_type: string
+        key_type: hash_diff
+
+      - target: id_number
+        data_type: string
+        source:
+          - id_number
+
+      - target: type_of_id
+        data_type: string
+        source:
+          - type_of_id
+
+      - target: date_of_issue
+        data_type: date
+        source:
+          - date_of_issue
+
+      - target: place_of_issue
+        data_type: string
+        source:
+          - place_of_issue

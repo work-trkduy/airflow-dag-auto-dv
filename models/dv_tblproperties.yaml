@@ -1,0 +1,6 @@
+version: 2
+
+dv_tblproperties:
+  read.parquet.vectorization.enabled: true
+  read.parquet.vectorization.batch-size: 10000
+  hive.engine.enabled: true
