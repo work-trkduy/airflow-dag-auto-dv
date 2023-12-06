@@ -80,4 +80,5 @@ class SQLScriptRenderer:
     def render_all_sql_template(self):
         for model in self.config['models']:
             template_result = self.render(model)
-            self.sql_template[f"{self.config['target_schema']}_{model['target']}_{self.operation}"] = template_result
+            if not re.fullmatch(r"\s*", template_result):
+                self.sql_template[f"{self.config['target_schema']}_{model['target']}_{self.operation}"] = template_result

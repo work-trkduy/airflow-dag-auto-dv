@@ -111,6 +111,34 @@ test_lnk_tables_task = create_spark_submit_op(
     app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lnk_*_test_all.sql"))
 )
 
+load_lsate_tables_task = create_spark_submit_op(
+    task_id="load-lsate-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_lsate_load.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lsate_load.sql"))
+)
+
+initial_load_sat_der_tables_task = create_spark_submit_op(
+    task_id="intial-load-sat-der-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_sat-der_load-initial.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_sat-der_load-initial.sql"))
+)
+
+initial_load_sat_tables_task = create_spark_submit_op(
+    task_id="intial-load-sat-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_sat_load-initial.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_sat_load-initial.sql"))
+)
+
+initial_load_sat_snp_tables_task = create_spark_submit_op(
+    task_id="intial-load-sat-snp-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_sat-snp_load-initial.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_sat-snp_load-initial.sql"))
+)
+
 load_sat_der_tables_task = create_spark_submit_op(
     task_id="load-sat-der-tables",
     app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
@@ -121,8 +149,8 @@ load_sat_der_tables_task = create_spark_submit_op(
 load_sat_tables_task = create_spark_submit_op(
     task_id="load-sat-tables",
     app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
-    files="/opt/airflow/dags/auto_dv/sql_scripts/*_sat_load-from-der.sql",
-    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_sat_load-from-der.sql"))
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_sat_load.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_sat_load.sql"))
 )
 
 load_sat_snp_tables_task = create_spark_submit_op(
@@ -139,6 +167,27 @@ test_sat_tables_task = create_spark_submit_op(
     app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_sat_*_test_all.sql"))
 )
 
+initial_load_lsat_der_tables_task = create_spark_submit_op(
+    task_id="intial-load-lsat-der-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_lsat-der_load-initial.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lsat-der_load-initial.sql"))
+)
+
+initial_load_lsat_tables_task = create_spark_submit_op(
+    task_id="intial-load-lsat-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_lsat_load-initial.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lsat_load-initial.sql"))
+)
+
+initial_load_lsat_snp_tables_task = create_spark_submit_op(
+    task_id="intial-load-lsat-snp-tables",
+    app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_lsat-snp_load-initial.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lsat-snp_load-initial.sql"))
+)
+
 load_lsat_der_tables_task = create_spark_submit_op(
     task_id="load-lsat-der-tables",
     app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
@@ -149,8 +198,8 @@ load_lsat_der_tables_task = create_spark_submit_op(
 load_lsat_tables_task = create_spark_submit_op(
     task_id="load-lsat-tables",
     app_path="/opt/airflow/dags/auto_dv/tasks/exec-sql-scripts.py",
-    files="/opt/airflow/dags/auto_dv/sql_scripts/*_lsat_load-from-der.sql",
-    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lsat_load-from-der.sql"))
+    files="/opt/airflow/dags/auto_dv/sql_scripts/*_lsat_load.sql",
+    app_args=map(os.path.basename, glob("/opt/airflow/dags/auto_dv/sql_scripts/*_lsat_load.sql"))
 )
 
 load_lsat_snp_tables_task = create_spark_submit_op(
@@ -171,11 +220,22 @@ start_task >> sync_input_batch_data_task
 start_task >> prepare_etl_scripts_task >> create_dv_tables_task
 (sync_input_batch_data_task, create_dv_tables_task) >> load_hub_tables_task >> test_hub_tables_task
 (sync_input_batch_data_task, create_dv_tables_task) >> load_lnk_tables_task >> test_lnk_tables_task
-(sync_input_batch_data_task, create_dv_tables_task) >> load_sat_der_tables_task
-(sync_input_batch_data_task, create_dv_tables_task) >> load_lsat_der_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> load_lsate_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> initial_load_sat_der_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> initial_load_sat_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> initial_load_sat_snp_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> initial_load_lsat_der_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> initial_load_lsat_tables_task
+(sync_input_batch_data_task, create_dv_tables_task) >> initial_load_lsat_snp_tables_task
 
 start_task >> create_metadata_tables_task >> update_logging_etl_batch_job_task
-(load_sat_der_tables_task, update_logging_etl_batch_job_task) >> load_sat_tables_task >> load_sat_snp_tables_task
+
+(initial_load_sat_der_tables_task, initial_load_sat_tables_task, initial_load_sat_snp_tables_task) >> load_sat_der_tables_task
+(load_sat_der_tables_task, update_logging_etl_batch_job_task) >> load_sat_tables_task
+(load_sat_der_tables_task, update_logging_etl_batch_job_task) >> load_sat_snp_tables_task
 load_sat_tables_task >> test_sat_tables_task
-(load_lsat_der_tables_task, update_logging_etl_batch_job_task) >> load_lsat_tables_task >> load_lsat_snp_tables_task
+
+(initial_load_lsat_der_tables_task, initial_load_lsat_tables_task, initial_load_lsat_snp_tables_task) >> load_lsat_der_tables_task
+(load_lsat_der_tables_task, update_logging_etl_batch_job_task) >> load_lsat_tables_task
+(load_lsat_der_tables_task, update_logging_etl_batch_job_task) >> load_lsat_snp_tables_task
 load_lsat_tables_task >> test_lsat_tables_task

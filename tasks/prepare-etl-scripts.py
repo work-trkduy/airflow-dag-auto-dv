@@ -11,8 +11,8 @@ def prepare_etl_scripts(home_path = home_path):
 
         for config_path in glob(f"{home_path}/schema_configs/{entity_name}_*.yaml"):
             for template_file in map(os.path.basename, glob(f"{entity_path}/*.sql")):
-                if "lsate" in template_file:
-                    continue    
+                # if "lsate" in template_file:
+                #     continue    
                 options = {
                     'file_loader': home_path,
                     'template_path': f"models/{entity_name}/{template_file}",

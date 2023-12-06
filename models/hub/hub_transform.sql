@@ -6,6 +6,8 @@
     render_list_biz_key_name,
     render_list_dv_system_column_name,
     render_list_dv_system_ldt_key_name -%}
+{%- from "macros/extract_name_source_columns.sql" import
+    render_list_hash_key_hub_component -%}
 {%- from "macros/derive_columns.sql" import
     render_hash_key_hub_treatment,
     render_list_biz_key_treatment,
@@ -23,6 +25,7 @@ with cte_stg_hub as (
         {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t')}},
         '{{collision_code}}' as dv_ccd
     from {{render_source_table_view_name(model)}}
+    where {{render_list_hash_key_hub_component(model) | from_json | join(' is not null and ')}} is not null
 ),
 cte_stg_hub_latest_records as (
     select * from (

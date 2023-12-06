@@ -1,15 +1,8 @@
 {%- from "macros/extract_name_tables.sql" import
-    render_target_table_full_name,
-    render_target_der_table_full_name,
     render_source_table_view_name -%}
-{%- from "macros/extract_name_columns.sql" import
-    render_hash_key_lsat_name,
-    render_hash_key_lnk_name,
-    render_hash_diff_name,
-    render_list_dependent_key_name,
-    render_list_attr_column_name,
-    render_list_dv_system_column_name,
-    render_list_dv_system_ldt_key_name -%}
+{%- from "macros/extract_name_source_columns.sql" import
+    render_list_hash_key_lnk_component,
+    render_list_source_dependent_key_name -%}
 {%- from "macros/derive_columns.sql" import
     render_hash_key_lsat_treatment,
     render_hash_key_lnk_treatment,
@@ -20,90 +13,20 @@
 
 {#---------------------------------------#}
 
-{%- set hkey_lnk_name = render_hash_key_lnk_name(model) -%}
-{%- set dep_keys = render_list_dependent_key_name(model) | from_json -%}
-{%- set ldt_keys = render_list_dv_system_ldt_key_name(dv_system) | from_json -%}
+{%- set src_hkey_lnk = render_list_hash_key_lnk_component(model) | from_json -%}
+{%- set src_dep_keys = render_list_source_dependent_key_name(model) | from_json -%}
 
-with cte_stg_lsat as (
-    select
-        {{render_hash_key_lsat_treatment(model, collision_code, dv_system)}},
-        {{render_hash_key_lnk_treatment(model, collision_code)}},
-        {{render_hash_diff_treatment(model)}},
-        {% for column in render_list_dependent_key_treatment(model) | from_json -%}
-        {{column}},
-        {% endfor -%}
-        {{render_list_attr_column_treatment(model) | from_json | join(',\n\t\t')}},
-        {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t\t')}},
-        '{{collision_code}}' as dv_ccd,
-        -1 as row_num
-    from {{render_source_table_view_name(model)}}
-),
-cte_lsat_der_set_row_num as (
-    select
-        {{render_hash_key_lsat_name(model)}},
-        {{render_hash_key_lnk_name(model)}},
-        {{render_hash_diff_name(model)}},
-        {% for column in render_list_dependent_key_name(model) | from_json -%}
-        {{column}},
-        {% endfor -%}
-        {{render_list_attr_column_name(model) | from_json | join(',\n\t\t')}},
-        {{render_list_dv_system_column_name(dv_system) | from_json | join(',\n\t\t')}},
-        dv_ccd,
-        row_number() over (
-            partition by {{hkey_lnk_name}} {{-', ' + dep_keys|join(', ') if dep_keys|length > 0}}
-            order by {% for key in ldt_keys -%}
-                {{key}} desc {{-', ' if not loop.last}}
-                {%- endfor %}
-        ) as row_num
-    from {{render_target_der_table_full_name(target_schema, model, target_type)}} tgt
-    where exists (
-        select 1
-        from cte_stg_lsat src
-        where tgt.{{hkey_lnk_name}} = src.{{hkey_lnk_name}}
-            {% for key in dep_keys -%}
-                and tgt.{{key}} = src.{{key}}
-            {% endfor -%}
-    )
-),
-cte_lsat_der_latest_records as (
-    select *
-    from cte_lsat_der_set_row_num
-    where row_num = 1
-),
-cte_stg_lsat_der_dedup_hsh_dif as (
-    select *
-    from (
-        select
-            *,
-            lag(dv_hsh_dif, 1, null) over w as prev_hash_diff,
-            lag(dv_cdc_ops, 1, null) over w as prev_cdc_ops
-        from (
-            select * from cte_stg_lsat
-            union
-            select * from cte_lsat_der_latest_records
-        )
-        window w as (
-            partition by {{hkey_lnk_name}} {{-', ' + dep_keys|join(', ') if dep_keys|length > 0}}
-            order by {% for key in ldt_keys -%}
-                {{key}} asc {{-', ' if not loop.last}}
-                {%- endfor %}
-        )
-    )
-    where
-        prev_hash_diff != dv_hsh_dif or
-        prev_hash_diff is null or
-        lower(dv_cdc_ops) = lower('d') or
-        lower(prev_cdc_ops) = lower('d')
-)
 select
-    {{render_hash_key_lsat_name(model)}},
-    {{render_hash_key_lnk_name(model)}},
-    {{render_hash_diff_name(model)}},
-    {% for column in render_list_dependent_key_name(model) | from_json -%}
+    {{render_hash_key_lsat_treatment(model, collision_code, dv_system)}},
+    {{render_hash_key_lnk_treatment(model, collision_code)}},
+    {{render_hash_diff_treatment(model)}},
+    {% for column in render_list_dependent_key_treatment(model) | from_json -%}
     {{column}},
     {% endfor -%}
-    {{render_list_attr_column_name(model) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system) | from_json | join(',\n\t')}},
-    dv_ccd
-from cte_stg_lsat_der_dedup_hsh_dif
-where row_num = -1
+    {{render_list_attr_column_treatment(model) | from_json | join(',\n\t')}},
+    {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t')}}
+from {{render_source_table_view_name(model)}}
+where 1=1
+    {% for column in src_hkey_lnk + src_dep_keys -%}
+    and {{column}} is not null
+    {% endfor -%}

@@ -1,11 +1,11 @@
-{%- macro render_hash_key_hub_name(models, with_data_type=false) -%}
-    {%- set column = models.get('columns') | selectattr("key_type", "equalto", "hash_key_hub") | first -%}
+{%- macro render_hash_key_hub_name(model, with_data_type=false) -%}
+    {%- set column = model.get('columns') | selectattr("key_type", "equalto", "hash_key_hub") | first -%}
     {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_list_hash_key_hub_name(models, with_data_type=false) -%}
+{%- macro render_list_hash_key_hub_name(model, with_data_type=false) -%}
     {%- set outs = [] -%}
-    {%- for column in models.get('columns') | selectattr("key_type", "equalto", "hash_key_hub") | list + models.get('columns') | selectattr("key_type", "equalto", "hash_key_drv") | list -%}
+    {%- for column in model.get('columns') | selectattr("key_type", "equalto", "hash_key_hub") | list + model.get('columns') | selectattr("key_type", "equalto", "hash_key_drv") | list -%}
         {%- set tmp -%}
             {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
         {%- endset -%}
@@ -14,34 +14,34 @@
     {{ outs | to_json }}
 {%- endmacro -%}
 
-{%- macro render_hash_key_lnk_name(models, with_data_type=false) -%}
-    {%- set column = models.get('columns') | selectattr("key_type", "equalto", "hash_key_lnk") | first -%}
+{%- macro render_hash_key_lnk_name(model, with_data_type=false) -%}
+    {%- set column = model.get('columns') | selectattr("key_type", "equalto", "hash_key_lnk") | first -%}
     {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_hash_key_drv_name(models, with_data_type=false) -%}
-    {%- set column = models.get('columns') | selectattr("key_type", "equalto", "hash_key_drv") | first -%}
+{%- macro render_hash_key_drv_name(model, with_data_type=false) -%}
+    {%- set column = model.get('columns') | selectattr("key_type", "equalto", "hash_key_drv") | first -%}
     {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_hash_key_sat_name(models, with_data_type=false) -%}
-    {%- set column = models.get('columns') | selectattr("key_type", "equalto", "hash_key_sat") | first -%}
+{%- macro render_hash_key_sat_name(model, with_data_type=false) -%}
+    {%- set column = model.get('columns') | selectattr("key_type", "equalto", "hash_key_sat") | first -%}
     {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_hash_key_lsat_name(models, with_data_type=false) -%}
-    {%- set column = models.get('columns') | selectattr("key_type", "equalto", "hash_key_sat") | first -%}
+{%- macro render_hash_key_lsat_name(model, with_data_type=false) -%}
+    {%- set column = model.get('columns') | selectattr("key_type", "equalto", "hash_key_sat") | first -%}
     {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_hash_diff_name(models, with_data_type=false) -%}
-    {%- set column = models.get('columns') | selectattr("key_type", "equalto", "hash_diff") | first -%}
+{%- macro render_hash_diff_name(model, with_data_type=false) -%}
+    {%- set column = model.get('columns') | selectattr("key_type", "equalto", "hash_diff") | first -%}
     {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_list_biz_key_name(models, with_data_type=false) -%}
+{%- macro render_list_biz_key_name(model, with_data_type=false) -%}
     {%- set outs = [] -%}
-    {%- for column in models.get('columns') | selectattr("key_type", "equalto", "biz_key") -%}
+    {%- for column in model.get('columns') | selectattr("key_type", "equalto", "biz_key") -%}
         {%- set tmp -%}
             {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
         {%- endset -%}
@@ -50,9 +50,9 @@
     {{ outs | to_json }}
 {%- endmacro -%}
 
-{%- macro render_list_dependent_key_name(models, with_data_type=false) -%}
+{%- macro render_list_dependent_key_name(model, with_data_type=false) -%}
     {%- set outs = [] -%}
-    {%- for column in models.get('columns') | selectattr('key_type', 'equalto', "dependent_key") -%}
+    {%- for column in model.get('columns') | selectattr('key_type', 'equalto', "dependent_key") -%}
         {%- set tmp -%}
             {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
         {%- endset -%}
@@ -61,9 +61,9 @@
     {{ outs | to_json }}
 {%- endmacro -%}
 
-{%- macro render_list_attr_column_name(models, with_data_type=false) -%}
+{%- macro render_list_attr_column_name(model, with_data_type=false) -%}
     {%- set outs = [] -%}
-    {%- for column in models.get('columns') | selectattr('key_type', 'undefined') -%}
+    {%- for column in model.get('columns') | selectattr('key_type', 'undefined') -%}
         {%- set tmp -%}
             {{column.get('target')}} {%- if with_data_type %} {{column.get('data_type')}} {%- endif -%}
         {%- endset -%}
@@ -90,4 +90,8 @@
         {%- do outs.append(tmp) -%}
     {%- endfor -%}
     {{ outs | to_json }}
+{%- endmacro -%}
+
+{%- macro render_dv_system_cdc_ops_name(dv_system) -%}
+    {{(dv_system.get('columns') | selectattr('target', 'equalto', 'dv_cdc_ops') | first).get('target')}}
 {%- endmacro -%}

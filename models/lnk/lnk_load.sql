@@ -11,7 +11,6 @@
 insert into {{render_target_table_full_name(target_schema, model)}} (
     {{render_hash_key_lnk_name(model, with_data_type = false)}},
     {{render_list_hash_key_hub_name(model, with_data_type = false) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system, with_data_type = false) | from_json | join(',\n\t')}},
-    dv_ccd
+    {{render_list_dv_system_column_name(dv_system, with_data_type = false) | from_json | join(',\n\t')}}
 )
 {% include 'models/lnk/lnk_transform.sql' %}

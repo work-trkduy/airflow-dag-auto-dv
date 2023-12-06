@@ -11,8 +11,7 @@ create table if not exists auto_dv_integration.sat_der_customer_2 (
 	dv_cdc_ops string,
 	dv_src_ldt timestamp,
 	dv_src_rec string,
-	dv_ldt timestamp,
-    dv_ccd string
+	dv_ldt timestamp
 )
 using iceberg
 tblproperties ('read.parquet.vectorization.enabled' = 'true'

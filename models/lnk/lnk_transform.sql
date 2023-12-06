@@ -6,6 +6,8 @@
     render_list_hash_key_hub_name,
     render_list_dv_system_column_name,
     render_list_dv_system_ldt_key_name -%}
+{%- from "macros/extract_name_source_columns.sql" import
+    render_list_hash_key_lnk_component -%}
 {%- from "macros/derive_columns.sql" import
     render_hash_key_lnk_treatment,
     render_list_hash_key_hub_treatment,
@@ -20,9 +22,9 @@ with cte_stg_lnk as (
     select
         {{render_hash_key_lnk_treatment(model, collision_code)}},
         {{render_list_hash_key_hub_treatment(model) | from_json | join(',\n\t')}},
-        {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t')}},
-        '{{collision_code}}' as dv_ccd
+        {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t')}}
     from {{render_source_table_view_name(model)}}
+    where {{render_list_hash_key_lnk_component(model) | from_json | join(' is not null and ')}} is not null
 ),
 cte_stg_lnk_latest_records as (
 select * from (
@@ -50,8 +52,7 @@ cte_stg_lnk_existed_keys (
 select
     {{hkey_name}},
     {{render_list_hash_key_hub_name(model, with_data_type = false) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system, with_data_type = false) | from_json | join(',\n\t')}},
-    dv_ccd
+    {{render_list_dv_system_column_name(dv_system, with_data_type = false) | from_json | join(',\n\t')}}
 from cte_stg_lnk_latest_records src
 where not exists (
     select 1

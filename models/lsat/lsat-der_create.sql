@@ -20,8 +20,7 @@ create table if not exists {{render_target_der_table_full_name(target_schema, mo
     {{column}},
     {% endfor -%}
     {{render_list_attr_column_name(model, with_data_type = true) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system, with_data_type = true) | from_json | join(',\n\t')}},
-    dv_ccd string
+    {{render_list_dv_system_column_name(dv_system, with_data_type = true) | from_json | join(',\n\t')}}
 )
 using iceberg
 {{render_tblproperties(tbl_properties)}}

@@ -21,6 +21,7 @@ with cte_stg_hub as (
 	current_timestamp() as dv_ldt,
         'test' as dv_ccd
     from $auto_dv_psa.customer
+    where cst_no is not null
 ),
 cte_stg_hub_latest_records as (
     select * from (

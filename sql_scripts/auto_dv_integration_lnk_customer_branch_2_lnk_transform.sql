@@ -8,9 +8,9 @@ with cte_stg_lnk as (
 	'I' as dv_cdc_ops,
 	current_timestamp() as dv_src_ldt,
 	'test' as dv_src_rec,
-	current_timestamp() as dv_ldt,
-        'test' as dv_ccd
+	current_timestamp() as dv_ldt
     from $auto_dv_psa.customer
+    where cst_no is not null and br_cd is not null
 ),
 cte_stg_lnk_latest_records as (
 select * from (
@@ -42,8 +42,7 @@ select
 	dv_cdc_ops,
 	dv_src_ldt,
 	dv_src_rec,
-	dv_ldt,
-    dv_ccd
+	dv_ldt
 from cte_stg_lnk_latest_records src
 where not exists (
     select 1
