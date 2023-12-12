@@ -6,7 +6,7 @@ select
     cast({{target_column}} as string) as error_value,
     '{{target_column}}' as error_column,
     'orphan' as error_code
-from {{render_target_table_full_name(target_schema, model)}} a
+from {{render_target_table_full_name(model)}} a
 where not exists (
     select 1 from {{parent_table}} b
     where a.{{target_column}} = b.{{parent_column}}

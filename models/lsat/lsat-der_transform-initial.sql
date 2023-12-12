@@ -20,8 +20,8 @@
 {%- set src_ldt_keys = render_list_source_ldt_key_name(dv_system) | from_json -%}
 
 select
-    {{render_hash_key_lsat_treatment(model, collision_code, dv_system)}},
-    {{render_hash_key_lnk_treatment(model, collision_code)}},
+    {{render_hash_key_lsat_treatment(model, dv_system)}},
+    {{render_hash_key_lnk_treatment(model)}},
     {{render_hash_diff_treatment(model)}},
     {% for column in render_list_dependent_key_treatment(model) | from_json -%}
     {{column}},

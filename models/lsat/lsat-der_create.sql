@@ -12,15 +12,15 @@
 
 {#---------------------------------------#}
 
-create table if not exists {{render_target_der_table_full_name(target_schema, model, target_type)}} (
-    {{render_hash_key_lsat_name(model, with_data_type = true)}},
-    {{render_hash_key_lnk_name(model, with_data_type = true)}},
-    {{render_hash_diff_name(model, with_data_type = true)}},
-    {% for column in render_list_dependent_key_name(model, with_data_type = true) | from_json -%}
+create table if not exists {{render_target_der_table_full_name(model)}} (
+    {{render_hash_key_lsat_name(model, with_dtype = true)}},
+    {{render_hash_key_lnk_name(model, with_dtype = true)}},
+    {{render_hash_diff_name(model, with_dtype = true)}},
+    {% for column in render_list_dependent_key_name(model, with_dtype = true) | from_json -%}
     {{column}},
     {% endfor -%}
-    {{render_list_attr_column_name(model, with_data_type = true) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system, with_data_type = true) | from_json | join(',\n\t')}}
+    {{render_list_attr_column_name(model, with_dtype = true) | from_json | join(',\n\t')}},
+    {{render_list_dv_system_column_name(dv_system, with_dtype = true) | from_json | join(',\n\t')}}
 )
 using iceberg
 {{render_tblproperties(tbl_properties)}}

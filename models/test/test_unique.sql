@@ -6,7 +6,7 @@ select
     cast({{target_column}} as string) as error_value,
     '{{target_column}}' as error_column,
     'unique' as error_code
-from {{render_target_table_full_name(target_schema, model)}}
+from {{render_target_table_full_name(model)}}
 group by {{target_column}}
 having count(1) > 1
 {%- endmacro -%}

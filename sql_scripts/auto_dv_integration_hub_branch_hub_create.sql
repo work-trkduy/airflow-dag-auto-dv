@@ -1,6 +1,6 @@
 create table if not exists auto_dv_integration.hub_branch (
     dv_hkey_hub_branch string,
-    br_cd string,
+    br_cd bigint,
     dv_kaf_ldt timestamp,
 	dv_kaf_ofs bigint,
 	dv_cdc_ops string,

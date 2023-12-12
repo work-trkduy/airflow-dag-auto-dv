@@ -19,8 +19,8 @@
 
 {%- if (model.get('columns') | selectattr("key_type", "equalto", "hash_key_drv") | list | length) > 0 -%}
 
-{%- set lnk_table_name = render_target_table_full_name(target_schema, model) -%}
-{%- set lsate_table_name = render_target_lsate_table_full_name(target_schema, model) -%}
+{%- set lnk_table_name = render_target_table_full_name(model) -%}
+{%- set lsate_table_name = render_target_lsate_table_full_name(model) -%}
 
 {%- set hkey_lnk_name = render_hash_key_lnk_name(model) -%}
 {%- set hkey_drv_name = render_hash_key_drv_name(model) -%}
@@ -31,9 +31,9 @@
 
 with cte_stg_lsate as (
     select
-        {{render_hash_key_lnk_treatment(model, collision_code)}},
+        {{render_hash_key_lnk_treatment(model)}},
         {{render_list_hash_key_lnk_component(model) | from_json | join(' is not null and ')}} is not null as hkey_lnk_not_null,
-        {{render_hash_key_drv_treatment(model, collision_code)}},
+        {{render_hash_key_drv_treatment(model)}},
         {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t\t')}},
         {{src_ldt_keys[0]}} as dv_startts,
         1 as from_stg

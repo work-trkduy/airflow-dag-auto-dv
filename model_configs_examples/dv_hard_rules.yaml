@@ -1,0 +1,37 @@
+dv_system:
+  columns:
+    - target: dv_kaf_ldt
+      dtype: timestamp
+      source:
+        name: current_timestamp()
+        dtype: timestamp
+
+    - target: dv_kaf_ofs
+      dtype: bigint
+      source:
+        name: monotonically_increasing_id()
+        dtype: bigint
+
+    - target: dv_cdc_ops
+      dtype: string
+      source:
+        name: "'I'"
+        dtype: string
+
+    - target: dv_src_ldt
+      dtype: timestamp
+      source:
+        name: current_timestamp()
+        dtype: timestamp
+
+    - target: dv_src_rec
+      dtype: string
+      source:
+        name: "'test'"
+        dtype: string
+
+    - target: dv_ldt
+      dtype: timestamp
+      source:
+        name: current_timestamp()
+        dtype: timestamp

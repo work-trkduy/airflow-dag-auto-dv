@@ -17,7 +17,7 @@
 with cte_stg_sat_snp as (
 {% include 'models/sat/sat-snp_transform.sql' %}
 )
-merge into {{render_target_snp_table_full_name(target_schema, model, target_type)}} tgt
+merge into {{render_target_snp_table_full_name(model)}} tgt
 using cte_stg_sat_snp src
 on tgt.{{hkey_hub_name}} = src.{{hkey_hub_name}}
     {%- for key in dep_keys %}

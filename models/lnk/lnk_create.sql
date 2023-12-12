@@ -9,10 +9,10 @@
 
 {#---------------------------------------#}
 
-create table if not exists {{render_target_table_full_name(target_schema, model)}} (
-    {{render_hash_key_lnk_name(model, with_data_type = true)}},
-    {{render_list_hash_key_hub_name(model, with_data_type = true) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system, with_data_type = true) | from_json | join(',\n\t')}}
+create table if not exists {{render_target_table_full_name(model)}} (
+    {{render_hash_key_lnk_name(model, with_dtype = true)}},
+    {{render_list_hash_key_hub_name(model, with_dtype = true) | from_json | join(',\n\t')}},
+    {{render_list_dv_system_column_name(dv_system, with_dtype = true) | from_json | join(',\n\t')}}
 )
 using iceberg
 {{render_tblproperties(tbl_properties)}}

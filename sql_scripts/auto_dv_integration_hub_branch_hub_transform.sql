@@ -1,13 +1,13 @@
 with cte_stg_hub as (
     select
         sha2(coalesce(nullif(rtrim(upper(cast(br_cd as string))), ''), '-1')|| '#~!' || 'test', 256) as dv_hkey_hub_branch,
-        coalesce(nullif(rtrim(upper(cast(br_cd as string))), ''), '-1') as br_cd,
+        cast(br_cd as bigint) as br_cd,
         current_timestamp() as dv_kaf_ldt,
-	monotonically_increasing_id() as dv_kaf_ofs,
-	'I' as dv_cdc_ops,
-	current_timestamp() as dv_src_ldt,
-	'test' as dv_src_rec,
-	current_timestamp() as dv_ldt,
+		monotonically_increasing_id() as dv_kaf_ofs,
+		'I' as dv_cdc_ops,
+		current_timestamp() as dv_src_ldt,
+		'test' as dv_src_rec,
+		current_timestamp() as dv_ldt,
         'test' as dv_ccd
     from $auto_dv_psa.customer
     where br_cd is not null

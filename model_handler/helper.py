@@ -33,17 +33,6 @@ class TemplateReader(ConfigReader):
         return sql_template
 
 
-class ConfigReaderFactory:
-    @staticmethod
-    def create_reader(config_path):
-        if config_path.endswith('.sql'):
-            return TemplateReader()
-        elif config_path.endswith('naming_convention.yaml'):
-            return ConfigConventionReader()
-        elif config_path.endswith('.yaml'):
-            return ConfigEntityReader()
-
-
 class SQLScriptRenderer:
     def __init__(self, options):
         # jinja2 env and template
@@ -52,7 +41,7 @@ class SQLScriptRenderer:
         self.jinja_env.filters["to_json"] = lambda a: json.dumps(a)
         self.jinja_env.filters["from_json"] = lambda a: json.loads(a)
         self.jinja_env.filters["replace_prefix"] = lambda a, old, new: re.sub(r"\A("+old+r"_)?", new+"_", a, 1)
-        self.template = self.jinja_env.get_template(options["template_path"])
+        self.templates = {os.path.basename(p).split('.')[0]: self.jinja_env.get_template(p) for p in options["template_paths"]}
 
         # convention
         self.convention_reader = ConfigConventionReader()
@@ -63,22 +52,18 @@ class SQLScriptRenderer:
         self.config_reader = ConfigEntityReader()
         self.config = self.config_reader.read(options['config_path'])
 
-        self.operation = os.path.basename(options['template_path']).split('.')[0]
-        self.sql_template = {}
+        self.sql_scripts = {}
 
-    def render(self, model):
-        rendered_script = self.template.render(
+    def render(self, template, model):
+        rendered_script = template.render(
             dv_system=self.convention['dv_system'],
-            target_type=self.config['target_entity_type'],
-            target_schema=self.config['target_schema'],
-            collision_code=self.config['collision_code'],
             tbl_properties=self.tbl_properties['dv_tblproperties'],
             model=model
         )
         return rendered_script
 
-    def render_all_sql_template(self):
-        for model in self.config['models']:
-            template_result = self.render(model)
-            if not re.fullmatch(r"\s*", template_result):
-                self.sql_template[f"{self.config['target_schema']}_{model['target']}_{self.operation}"] = template_result
+    def render_all_sql_templates(self):
+        for operation, template in self.templates.items():
+            rendered_script = self.render(template, self.config)
+            if not re.fullmatch(r"\s*", rendered_script):
+                self.sql_scripts[f"{self.config['target_schema']}_{self.config['target']}_{operation}"] = rendered_script

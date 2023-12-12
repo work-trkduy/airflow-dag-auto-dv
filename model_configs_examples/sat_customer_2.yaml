@@ -1,0 +1,53 @@
+collision_code: test
+target_entity_type: sat
+target_schema: auto_dv_integration
+target: sat_customer_2
+source: auto_dv_psa.customer
+columns:
+  - target: dv_hkey_sat_customer
+    dtype: string
+    key_type: hash_key_sat
+    tests:
+      - unique
+      - not_null
+
+  - target: dv_hkey_hub_customer
+    dtype: string
+    key_type: hash_key_hub
+    source:
+      - cst_no
+      - br_cd
+    tests:
+      - not_null
+      - orphan:
+          parent_table: auto_dv_integration.hub_customer
+          parent_column: dv_hkey_hub_customer
+
+  - target: create_dt
+    dtype: timestamp
+    key_type: dependent_key
+    source:
+      name: create_dt
+      dtype: timestamp
+
+  - target: dv_hsh_dif
+    dtype: string
+    key_type: hash_diff
+
+  - target: cst_nm
+    dtype: string
+    source:
+      name: cst_nm
+      dtype: string
+
+  - target: cst_full_nm
+    dtype: string
+    source:
+      name: cst_full_nm
+      dtype: string
+
+  - target: cst_type
+    dtype: string
+    source:
+      name: cst_type
+      dtype: string

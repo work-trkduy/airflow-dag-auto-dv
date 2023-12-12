@@ -1,17 +1,17 @@
-{%- macro render_target_table_full_name(target_schema, model) -%}
-    {{target_schema}}.{{model.get('target')}}
+{%- macro render_target_table_full_name(model) -%}
+    {{model.get('target_schema')}}.{{model.get('target')}}
 {%- endmacro -%}
 
-{%- macro render_target_der_table_full_name(target_schema, model, target_type) -%}
-    {{target_schema}}.{{model.get('target') | replace_prefix(target_type, target_type+'_der')}}
+{%- macro render_target_der_table_full_name(model) -%}
+    {{model.get('target_schema')}}.{{model.get('target') | replace_prefix(model.get('target_entity_type'), model.get('target_entity_type')+'_der')}}
 {%- endmacro -%}
 
-{%- macro render_target_snp_table_full_name(target_schema, model, target_type) -%}
-    {{target_schema}}.{{model.get('target') | replace_prefix(target_type, target_type+'_snp')}}
+{%- macro render_target_snp_table_full_name(model) -%}
+    {{model.get('target_schema')}}.{{model.get('target') | replace_prefix(model.get('target_entity_type'), model.get('target_entity_type')+'_snp')}}
 {%- endmacro -%}
 
-{%- macro render_target_lsate_table_full_name(target_schema, model) -%}
-    {{target_schema}}.lsate_{{model.get('target')}}
+{%- macro render_target_lsate_table_full_name(model) -%}
+    {{model.get('target_schema')}}.lsate_{{model.get('target')}}
 {%- endmacro -%}
 
 {%- macro render_source_table_full_name(model) -%}
@@ -20,10 +20,6 @@
 
 {%- macro render_source_table_view_name(model) -%}
     ${{model.get('source')}}
-{%- endmacro -%}
-
-{%- macro render_batch_job_log_table_full_name() -%}
-    auto_dv_metadata.logging_etl_batch_job
 {%- endmacro -%}
 
 {%- macro render_tblproperties(dv_tblproperties) -%}

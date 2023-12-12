@@ -9,6 +9,7 @@
 {%- from "macros/extract_name_source_columns.sql" import
     render_list_hash_key_hub_component -%}
 {%- from "macros/derive_columns.sql" import
+    render_collision_code_treatment,
     render_hash_key_hub_treatment,
     render_list_biz_key_treatment,
     render_list_dv_system_column_treatment -%}
@@ -20,10 +21,10 @@
 
 with cte_stg_hub as (
     select
-        {{render_hash_key_hub_treatment(model, collision_code)}},
-        {{render_list_biz_key_treatment(model) | from_json | join(',\n\t')}},
-        {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t')}},
-        '{{collision_code}}' as dv_ccd
+        {{render_hash_key_hub_treatment(model)}},
+        {{render_list_biz_key_treatment(model) | from_json | join(',\n\t\t')}},
+        {{render_list_dv_system_column_treatment(dv_system) | from_json | join(',\n\t\t')}},
+        {{render_collision_code_treatment(model)}}
     from {{render_source_table_view_name(model)}}
     where {{render_list_hash_key_hub_component(model) | from_json | join(' is not null and ')}} is not null
 ),
@@ -46,14 +47,14 @@ cte_stg_hub_existed_keys (
     from cte_stg_hub src
     where exists (
         select 1
-        from {{render_target_table_full_name(target_schema, model)}} tgt
+        from {{render_target_table_full_name(model)}} tgt
         where tgt.{{hkey_name}} = src.{{hkey_name}}
     )
 )
 select
     {{hkey_name}},
-    {{render_list_biz_key_name(model, with_data_type = false) | from_json | join(',\n\t')}},
-    {{render_list_dv_system_column_name(dv_system, with_data_type = false) | from_json | join(',\n\t')}},
+    {{render_list_biz_key_name(model) | from_json | join(',\n\t')}},
+    {{render_list_dv_system_column_name(dv_system) | from_json | join(',\n\t')}},
     dv_ccd
 from cte_stg_hub_latest_records src
 where not exists (

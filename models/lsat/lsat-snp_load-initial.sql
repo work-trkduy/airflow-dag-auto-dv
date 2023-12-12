@@ -10,7 +10,7 @@
 
 {#---------------------------------------#}
 
-insert into {{render_target_snp_table_full_name(target_schema, model, target_type)}} (
+insert into {{render_target_snp_table_full_name(model)}} (
     {{render_hash_key_lsat_name(model)}},
     {{render_hash_key_lnk_name(model)}},
     {{render_hash_diff_name(model)}},

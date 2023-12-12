@@ -10,7 +10,7 @@
 
 {#---------------------------------------#}
 
-insert into {{render_target_table_full_name(target_schema, model)}} (
+insert into {{render_target_table_full_name(model)}} (
     {{render_hash_key_sat_name(model)}},
     {{render_hash_key_hub_name(model)}},
     {{render_hash_diff_name(model)}},

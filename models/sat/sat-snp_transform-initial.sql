@@ -31,8 +31,8 @@
 
 with cte_stg_sat as (
     select
-        {{render_hash_key_sat_treatment(model, collision_code, dv_system)}},
-        {{render_hash_key_hub_treatment(model, collision_code)}},
+        {{render_hash_key_sat_treatment(model, dv_system)}},
+        {{render_hash_key_hub_treatment(model)}},
         {{render_hash_diff_treatment(model)}},
         {% for column in render_list_dependent_key_treatment(model) | from_json -%}
         {{column}},

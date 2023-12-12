@@ -1,0 +1,23 @@
+collision_code: test
+target_entity_type: hub
+target_schema: auto_dv_integration
+target: hub_branch
+source: auto_dv_psa.customer
+partition:
+  - days(dv_src_ldt)
+columns:
+  - target: dv_hkey_hub_branch
+    dtype: string
+    key_type: hash_key_hub
+    source:
+      - br_cd
+    tests:
+      - unique
+      - not_null
+
+  - target: br_cd
+    dtype: bigint
+    key_type: biz_key
+    source:
+      name: br_cd
+      dtype: string

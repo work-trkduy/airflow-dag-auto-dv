@@ -1,0 +1,27 @@
+collision_code: test
+target_entity_type: lnk 
+target_schema: auto_dv_integration
+target: lnk_customer_branch
+source: auto_dv_psa.customer
+columns:
+  - target: dv_hkey_lnk_customer_branch
+    dtype: string
+    key_type: hash_key_lnk
+    source:
+      - cst_no
+      - br_cd
+    tests:
+      - unique
+      - not_null
+
+  - target: dv_hkey_hub_customer
+    dtype: string
+    key_type: hash_key_hub
+    source:
+      - cst_no
+
+  - target: dv_hkey_hub_branch
+    dtype: string
+    key_type: hash_key_hub
+    source:
+      - br_cd

@@ -2,7 +2,7 @@ create table if not exists auto_dv_integration.lsat_customer_branch_2 (
     dv_hkey_lsat_customer_branch string,
     dv_hkey_lnk_customer_branch string,
     dv_hsh_dif string,
-    phone string,
+    phone bigint,
     id_number string,
 	type_of_id string,
 	date_of_issue date,

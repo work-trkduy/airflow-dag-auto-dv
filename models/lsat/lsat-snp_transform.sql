@@ -33,7 +33,7 @@ with cte_lsat_der_latest_records as (
                 partition by {{hkey_lnk_name}} {{-', ' + dep_keys|join(', ') if dep_keys|length > 0}}
                 order by {% for key in ldt_keys -%} {{key}} desc {{-', ' if not loop.last-}} {%- endfor -%}
             ) as row_num
-        from {{render_target_der_table_full_name(target_schema, model, target_type)}}
+        from {{render_target_der_table_full_name(model)}}
         where {{ldt_keys[0]}} >= $v_from_date and {{ldt_keys[0]}} < $v_end_date
     )
     where row_num = 1
@@ -46,7 +46,7 @@ cte_lsat_latest_records as (
                 partition by {{hkey_lnk_name}} {{-', ' + dep_keys|join(', ') if dep_keys|length > 0}}
                 order by {% for key in ldt_keys -%} {{key}} desc {{-', ' if not loop.last-}} {%- endfor -%}
             ) as row_num
-        from {{render_target_snp_table_full_name(target_schema, model, target_type)}}
+        from {{render_target_snp_table_full_name(model)}}
     )
     where row_num = 1
 )

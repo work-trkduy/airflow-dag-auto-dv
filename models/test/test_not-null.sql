@@ -6,7 +6,7 @@ select
     cast({{target_column}} as string) as error_value,
     '{{target_column}}' as error_column,
     'not_null' as error_code
-from {{render_target_table_full_name(target_schema, model)}}
+from {{render_target_table_full_name(model)}}
 where {{target_column}} is null
 {%- endmacro -%}
 

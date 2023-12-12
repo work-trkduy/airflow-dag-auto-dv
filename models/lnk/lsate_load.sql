@@ -10,7 +10,7 @@
 
 {%- if (model.get('columns') | selectattr("key_type", "equalto", "hash_key_drv") | list | length) > 0 -%}
 
-insert into {{render_target_lsate_table_full_name(target_schema, model)}} (
+insert into {{render_target_lsate_table_full_name(model)}} (
     {{render_hash_key_lnk_name(model)}},
     dv_startts,
     dv_endts,
