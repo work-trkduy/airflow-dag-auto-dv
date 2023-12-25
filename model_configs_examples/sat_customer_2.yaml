@@ -1,8 +1,9 @@
 collision_code: test
 target_entity_type: sat
 target_schema: auto_dv_integration
-target: sat_customer_2
-source: auto_dv_psa.customer
+target_table: sat_customer_2
+source_schema: auto_dv_psa
+source_table: customer
 columns:
   - target: dv_hkey_sat_customer
     dtype: string

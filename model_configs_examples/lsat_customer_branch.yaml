@@ -1,8 +1,9 @@
 collision_code: test
 target_entity_type: lsat
 target_schema: auto_dv_integration
-target: lsat_customer_branch
-source: auto_dv_psa.customer
+target_table: lsat_customer_branch
+source_schema: auto_dv_psa
+source_table: customer
 columns:
   - target: dv_hkey_lsat_customer_branch
     dtype: string

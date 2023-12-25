@@ -4,15 +4,15 @@ select
     sha2(coalesce(nullif(rtrim(cast(id_number as string)), ''), repeat('0',16)) || '#~!' || coalesce(nullif(rtrim(cast(type_of_id as string)), ''), repeat('0',16)) || '#~!' || coalesce(nullif(rtrim(cast(date_of_issue as string)), ''), repeat('0',16)) || '#~!' || coalesce(nullif(rtrim(cast(place_of_issue as string)), ''), repeat('0',16)), 256) as dv_hsh_dif,
     cast(phone as bigint) as phone,
     id_number,
-	type_of_id,
-	date_of_issue,
-	place_of_issue,
+    type_of_id,
+    date_of_issue,
+    place_of_issue,
     current_timestamp() as dv_kaf_ldt,
-	monotonically_increasing_id() as dv_kaf_ofs,
-	'I' as dv_cdc_ops,
-	current_timestamp() as dv_src_ldt,
-	'test' as dv_src_rec,
-	current_timestamp() as dv_ldt
+    monotonically_increasing_id() as dv_kaf_ofs,
+    'I' as dv_cdc_ops,
+    current_timestamp() as dv_src_ldt,
+    'test' as dv_src_rec,
+    current_timestamp() as dv_ldt
 from $auto_dv_psa.customer
 where
     current_timestamp() >= $v_end_date

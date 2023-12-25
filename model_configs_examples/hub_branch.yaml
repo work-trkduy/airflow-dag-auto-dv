@@ -1,8 +1,9 @@
 collision_code: test
 target_entity_type: hub
 target_schema: auto_dv_integration
-target: hub_branch
-source: auto_dv_psa.customer
+target_table: hub_branch
+source_schema: auto_dv_psa
+source_table: customer
 partition:
   - days(dv_src_ldt)
 columns:

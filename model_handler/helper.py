@@ -64,6 +64,6 @@ class SQLScriptRenderer:
 
     def render_all_sql_templates(self):
         for operation, template in self.templates.items():
-            rendered_script = self.render(template, self.config)
+            rendered_script = self.render(template, self.config).replace("\t", "    ")
             if not re.fullmatch(r"\s*", rendered_script):
-                self.sql_scripts[f"{self.config['target_schema']}_{self.config['target']}_{operation}"] = rendered_script
+                self.sql_scripts[f"{self.config['target_schema']}_{self.config['target_table']}_{operation}"] = rendered_script

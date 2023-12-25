@@ -16,6 +16,7 @@ spark_conf = {
     "spark.yarn.queue": "root.default",
     "spark.yarn.jars": "hdfs://192.168.1.9/spark/jars/*",
     "spark.jars.packages": "org.apache.iceberg:iceberg-spark-runtime-3.4_2.12:1.4.2",
+    "spark.hadoop.hive.metastore.uris": "thrift://192.168.1.9:9083",
     "spark.sql.extensions": "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions",
     "spark.sql.catalog.spark_catalog": "org.apache.iceberg.spark.SparkSessionCatalog",
     "spark.sql.catalog.spark_catalog.type": "hive",

@@ -4,11 +4,11 @@ with cte_stg_lsate as (
         cst_no is not null and br_cd is not null as hkey_lnk_not_null,
         sha2(coalesce(nullif(rtrim(upper(cast(cst_no as string))), ''), '-1')|| '#~!' || 'test', 256) as dv_hkey_hub_customer,
         current_timestamp() as dv_kaf_ldt,
-		monotonically_increasing_id() as dv_kaf_ofs,
-		'I' as dv_cdc_ops,
-		current_timestamp() as dv_src_ldt,
-		'test' as dv_src_rec,
-		current_timestamp() as dv_ldt,
+        monotonically_increasing_id() as dv_kaf_ofs,
+        'I' as dv_cdc_ops,
+        current_timestamp() as dv_src_ldt,
+        'test' as dv_src_rec,
+        current_timestamp() as dv_ldt,
         current_timestamp() as dv_startts,
         1 as from_stg
     from $auto_dv_psa.customer
@@ -28,7 +28,7 @@ cte_current_effectivity as (
                 partition by lsate.dv_hkey_lnk_customer_branch
                 order by lsate.dv_src_ldt desc, lsate.dv_kaf_ldt desc, lsate.dv_kaf_ofs desc
             ) as row_num
-        from auto_dv_integration.lsate_lnk_customer_branch_2 lsate
+        from auto_dv_integration.lsate_customer_branch_2 lsate
         join auto_dv_integration.lnk_customer_branch_2 lnk
             on lsate.dv_hkey_lnk_customer_branch = lnk.dv_hkey_lnk_customer_branch
     )

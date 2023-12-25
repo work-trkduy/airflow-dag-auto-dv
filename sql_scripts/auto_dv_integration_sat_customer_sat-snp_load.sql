@@ -27,14 +27,14 @@ select
     dv_hkey_hub_customer,
     dv_hsh_dif,
     cst_nm,
-	cst_full_nm,
-	cst_type,
+    cst_full_nm,
+    cst_type,
     dv_kaf_ldt,
-	dv_kaf_ofs,
-	dv_cdc_ops,
-	dv_src_ldt,
-	dv_src_rec,
-	dv_ldt
+    dv_kaf_ofs,
+    dv_cdc_ops,
+    dv_src_ldt,
+    dv_src_rec,
+    dv_ldt
 from cte_sat_der_latest_records sat_der
 where not exists (
     select 1 from cte_sat_latest_records sat_snp

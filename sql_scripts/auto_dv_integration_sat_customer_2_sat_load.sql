@@ -4,14 +4,14 @@ insert into auto_dv_integration.sat_customer_2 (
     dv_hsh_dif,
     create_dt,
     cst_nm,
-	cst_full_nm,
-	cst_type,
+    cst_full_nm,
+    cst_type,
     dv_kaf_ldt,
-	dv_kaf_ofs,
-	dv_cdc_ops,
-	dv_src_ldt,
-	dv_src_rec,
-	dv_ldt
+    dv_kaf_ofs,
+    dv_cdc_ops,
+    dv_src_ldt,
+    dv_src_rec,
+    dv_ldt
 )
 with cte_sat_der_latest_records as (
     select * from (
@@ -42,14 +42,14 @@ select
     dv_hsh_dif,
     create_dt,
     cst_nm,
-	cst_full_nm,
-	cst_type,
+    cst_full_nm,
+    cst_type,
     dv_kaf_ldt,
-	dv_kaf_ofs,
-	dv_cdc_ops,
-	dv_src_ldt,
-	dv_src_rec,
-	dv_ldt
+    dv_kaf_ofs,
+    dv_cdc_ops,
+    dv_src_ldt,
+    dv_src_rec,
+    dv_ldt
 from cte_sat_der_latest_records sat_der
 where not exists (
     select 1 from cte_sat_latest_records sat

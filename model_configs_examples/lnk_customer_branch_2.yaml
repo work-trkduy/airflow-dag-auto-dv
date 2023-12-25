@@ -1,8 +1,9 @@
 collision_code: test
 target_entity_type: lnk 
 target_schema: auto_dv_integration
-target: lnk_customer_branch_2
-source: auto_dv_psa.customer
+target_table: lnk_customer_branch_2
+source_schema: auto_dv_psa
+source_table: customer
 columns:
   - target: dv_hkey_lnk_customer_branch
     dtype: string

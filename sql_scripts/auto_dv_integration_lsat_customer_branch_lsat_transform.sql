@@ -26,15 +26,15 @@ select
     dv_hkey_lnk_customer_branch,
     dv_hsh_dif,
     id_number,
-	type_of_id,
-	date_of_issue,
-	place_of_issue,
+    type_of_id,
+    date_of_issue,
+    place_of_issue,
     dv_kaf_ldt,
-	dv_kaf_ofs,
-	dv_cdc_ops,
-	dv_src_ldt,
-	dv_src_rec,
-	dv_ldt
+    dv_kaf_ofs,
+    dv_cdc_ops,
+    dv_src_ldt,
+    dv_src_rec,
+    dv_ldt
 from cte_lsat_der_latest_records lsat_der
 where not exists (
     select 1 from cte_lsat_latest_records lsat
