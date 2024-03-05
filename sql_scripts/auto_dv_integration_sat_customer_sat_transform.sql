@@ -39,6 +39,7 @@ where not exists (
     select 1 from cte_sat_latest_records sat
     where
         sat_der.dv_hkey_hub_customer = sat.dv_hkey_hub_customer
-        and lower(sat_der.dv_cdc_ops) != 'd'
-        and lower(sat.dv_cdc_ops) != 'd'
+        and sat_der.dv_hsh_dif = sat.dv_hsh_dif
+        and lower(sat_der.dv_cdc_ops) not in ('d','t')
+        and lower(sat.dv_cdc_ops) not in ('d','t')
 )

@@ -13,6 +13,7 @@ dag = DAG(
 )
 
 spark_conf = {
+    "spark.submit.deployMode": "cluster",
     "spark.yarn.queue": "root.default",
     "spark.yarn.jars": "hdfs://192.168.1.9/spark/jars/*",
     "spark.jars.packages": "org.apache.iceberg:iceberg-spark-runtime-3.4_2.12:1.4.2",
@@ -33,6 +34,7 @@ spark_conf = {
     "spark.dynamicAllocation.minExecutors": "2",
     "spark.dynamicAllocation.maxExecutors": "8",
 }
+
 
 def create_spark_submit_op(
     task_id,

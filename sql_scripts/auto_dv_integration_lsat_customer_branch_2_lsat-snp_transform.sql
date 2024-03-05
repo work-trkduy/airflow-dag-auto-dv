@@ -42,6 +42,7 @@ where not exists (
     where
         lsat_der.dv_hkey_lnk_customer_branch = lsat_snp.dv_hkey_lnk_customer_branch
         and lsat_der.phone = lsat_snp.phone
-        and lower(lsat_der.dv_cdc_ops) != 'd'
-        and lower(lsat_snp.dv_cdc_ops) != 'd'
+        and lsat_der.dv_hsh_dif = lsat_snp.dv_hsh_dif
+        and lower(lsat_der.dv_cdc_ops) not in ('d','t')
+        and lower(lsat_snp.dv_cdc_ops) not in ('d','t')
 )

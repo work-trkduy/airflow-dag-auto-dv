@@ -24,6 +24,7 @@
 {%- set dep_keys = render_list_dependent_key_name(model) | from_json -%}
 {%- set ldt_keys = render_list_dv_system_ldt_key_name(dv_system) | from_json -%}
 {%- set cdc_ops = render_dv_system_cdc_ops_name(dv_system) -%}
+{%- set hash_diff = render_hash_diff_name(model) -%}
 
 with cte_lsat_der_latest_records as (
     select * from (
@@ -67,6 +68,7 @@ where not exists (
         {% for column in dep_keys -%}
         and lsat_der.{{column}} = lsat.{{column}}
         {% endfor -%}
-        and lower(lsat_der.{{cdc_ops}}) != 'd'
-        and lower(lsat.{{cdc_ops}}) != 'd'
+        and lsat_der.{{hash_diff}} = lsat.{{hash_diff}}
+        and lower(lsat_der.{{cdc_ops}}) not in ('d','t')
+        and lower(lsat.{{cdc_ops}}) not in ('d','t')
 )

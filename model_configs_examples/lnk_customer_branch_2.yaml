@@ -20,9 +20,15 @@ columns:
     key_type: hash_key_drv
     source:
       - cst_no
+    parent: auto_dv_integration.hub_customer
+    tests:
+      - orphan
 
   - target: dv_hkey_hub_branch
     dtype: string
     key_type: hash_key_hub
     source:
       - br_cd
+    parent: auto_dv_integration.hub_branch
+    tests:
+      - orphan

@@ -24,6 +24,7 @@
 {%- set dep_keys = render_list_dependent_key_name(model) | from_json -%}
 {%- set ldt_keys = render_list_dv_system_ldt_key_name(dv_system) | from_json -%}
 {%- set cdc_ops = render_dv_system_cdc_ops_name(dv_system) -%}
+{%- set hash_diff = render_hash_diff_name(model) -%}
 
 with cte_sat_der_latest_records as (
     select * from (
@@ -67,6 +68,7 @@ where not exists (
         {% for column in dep_keys -%}
         and sat_der.{{column}} = sat_snp.{{column}}
         {% endfor -%}
-        and lower(sat_der.{{cdc_ops}}) != 'd'
-        and lower(sat_snp.{{cdc_ops}}) != 'd'
+        and sat_der.{{hash_diff}} = sat_snp.{{hash_diff}}
+        and lower(sat_der.{{cdc_ops}}) not in ('d','t')
+        and lower(sat_snp.{{cdc_ops}}) not in ('d','t')
 )

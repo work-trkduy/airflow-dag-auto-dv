@@ -4,6 +4,7 @@ target_schema: auto_dv_integration
 target_table: sat_customer
 source_schema: auto_dv_psa
 source_table: customer
+parent_table: auto_dv_integration.hub_customer
 columns:
   - target: dv_hkey_sat_customer
     dtype: string
@@ -19,9 +20,7 @@ columns:
       - cst_no
     tests:
       - not_null
-      - orphan:
-          parent_table: auto_dv_integration.hub_customer
-          parent_column: dv_hkey_hub_customer
+      - orphan
 
   - target: dv_hsh_dif
     dtype: string

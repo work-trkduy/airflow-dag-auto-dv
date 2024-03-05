@@ -41,8 +41,9 @@ where not exists (
     select 1 from cte_lsat_latest_records lsat_snp
     where
         lsat_der.dv_hkey_lnk_customer_branch = lsat_snp.dv_hkey_lnk_customer_branch
-        and lower(lsat_der.dv_cdc_ops) != 'd'
-        and lower(lsat_snp.dv_cdc_ops) != 'd'
+        and lsat_der.dv_hsh_dif = lsat_snp.dv_hsh_dif
+        and lower(lsat_der.dv_cdc_ops) not in ('d','t')
+        and lower(lsat_snp.dv_cdc_ops) not in ('d','t')
 )
 )
 merge into auto_dv_integration.lsat_snp_customer_branch tgt

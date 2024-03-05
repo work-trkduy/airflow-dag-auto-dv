@@ -4,6 +4,7 @@ target_schema: auto_dv_integration
 target_table: lsat_customer_branch
 source_schema: auto_dv_psa
 source_table: customer
+parent_table: auto_dv_integration.lnk_customer_branch
 columns:
   - target: dv_hkey_lsat_customer_branch
     dtype: string
@@ -20,9 +21,7 @@ columns:
       - br_cd
     tests:
       - not_null
-      - orphan:
-          parent_table: auto_dv_integration.lnk_customer_branch
-          parent_column: dv_hkey_lnk_customer_branch
+      - orphan
 
   - target: dv_hsh_dif
     dtype: string

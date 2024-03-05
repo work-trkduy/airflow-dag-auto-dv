@@ -27,6 +27,18 @@
     ${{model.get('source_schema')}}.{{model.get('source_table')}}
 {%- endmacro -%}
 
+{%- macro render_parent_table_full_name(model, target_column=None) -%}
+    {%- if column_name == None -%}
+        {{model.get('parent_table')}}
+    {%- else -%}
+        {%- set column = model.get('columns') | selectattr("target", "equalto", target_column) | first -%}
+        {%- if column.parent is defined -%}
+            {{column.get('parent')}}
+        {%- else -%}
+            {{model.get('parent_table')}}
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
 
 {%- macro render_tblproperties(dv_tblproperties) -%}
 {%- if dv_tblproperties -%}

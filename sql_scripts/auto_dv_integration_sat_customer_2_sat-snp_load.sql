@@ -42,8 +42,9 @@ where not exists (
     where
         sat_der.dv_hkey_hub_customer = sat_snp.dv_hkey_hub_customer
         and sat_der.create_dt = sat_snp.create_dt
-        and lower(sat_der.dv_cdc_ops) != 'd'
-        and lower(sat_snp.dv_cdc_ops) != 'd'
+        and sat_der.dv_hsh_dif = sat_snp.dv_hsh_dif
+        and lower(sat_der.dv_cdc_ops) not in ('d','t')
+        and lower(sat_snp.dv_cdc_ops) not in ('d','t')
 )
 )
 merge into auto_dv_integration.sat_snp_customer_2 tgt
